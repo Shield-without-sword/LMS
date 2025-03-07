@@ -1,21 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { APIUrl, handleError, handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
-import { FaBook, FaCode, FaProjectDiagram, FaComments, FaChalkboardTeacher, FaSignOutAlt, 
-  FaUserCircle, FaBell, FaChartLine, FaGraduationCap, FaCalendarAlt, FaCog } from "react-icons/fa";
+import { 
+  FaBook, FaCode, FaProjectDiagram, FaComments, FaChalkboardTeacher, FaSignOutAlt, 
+  FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy
+} from "react-icons/fa";
 
 function Home() {
     const [loggedInUser, setLoggedInUser] = useState("");
     const [expenses, setExpenses] = useState([]);
     const [incomeAmt, setIncomeAmt] = useState(0);
     const [expenseAmt, setExpenseAmt] = useState(0);
-    const [activeMenu, setActiveMenu] = useState("dashboard");
+    const [activeMenu, setActiveMenu] = useState("projects");
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         setLoggedInUser(localStorage.getItem("loggedInUser"));
-    }, []);
+        
+        // Set active menu based on current path
+        const path = location.pathname.substring(1);
+        if (path) {
+            setActiveMenu(path);
+        } else {
+            setActiveMenu("projects");
+        }
+    }, [location]);
 
     useEffect(() => {
         const amounts = expenses.map(item => item.amount);
@@ -59,85 +70,160 @@ function Home() {
         fetchExpenses();
     }, []);
 
+    // Only the specified menu items
     const menuItems = [
-        { name: "dashboard", icon: <FaChartLine />, label: "Dashboard" },
         { name: "courses", icon: <FaBook />, label: "Courses" },
-        { name: "exercises", icon: <FaCode />, label: "Coding Exercises" },
-        { name: "projects", icon: <FaProjectDiagram />, label: "Projects" },
-        { name: "discussions", icon: <FaComments />, label: "Discussions" },
         { name: "mentorship", icon: <FaChalkboardTeacher />, label: "Mentorship" },
+        { name: "interview", icon: <FaBriefcase />, label: "Interview" },
+        { name: "projects", icon: <FaProjectDiagram />, label: "Projects" },
+        { name: "community", icon: <FaComments />, label: "Community" },
+        { name: "hackathon", icon: <FaTrophy />, label: "Hackathon" }
     ];
 
     return (
-        <div className="flex h-screen p-4 bg-gray-50">
-            {/* Sidebar */}
-            <div className="w-72 bg-gradient-to-b from-indigo-800 to-purple-900 text-white shadow-xl">
-                <div className="p-5">
-                    <div className="flex items-center gap-3 mb-8">
-                        <FaGraduationCap className="text-2xl text-indigo-300" />
-                        <h2 className="text-2xl font-bold tracking-wide">Learning Hub</h2>
+        <div className="flex flex-col h-screen bg-gray-50">
+            {/* Simplified Header with Only Required Navigation Elements */}
+            <header className="bg-white shadow-md">
+                <div className="flex flex-wrap items-center justify-between px-4 py-3">
+                    {/* User Profile */}
+                    <div className="flex items-center gap-2 mr-4">
+                        <FaUserCircle className="text-lg text-indigo-600" />
+                        <span className="font-medium text-sm">{loggedInUser}</span>
                     </div>
                     
-                    <div className="mb-8 bg-indigo-900/30 rounded-lg p-4 flex items-center gap-3">
-                        <FaUserCircle className="text-3xl text-indigo-300" />
-                        <div>
-                            <h3 className="font-semibold">{loggedInUser}</h3>
-                            <p className="text-indigo-300 text-sm">Student</p>
-                        </div>
-                    </div>
-                    
-                    <nav className="space-y-2">
+                    {/* Simplified Navigation Menu with just 6 items */}
+                    <nav className="flex flex-1 flex-wrap items-center justify-center gap-2">
                         {menuItems.map((item) => (
                             <button 
                                 key={item.name}
-                                className={`flex items-center gap-3 w-full p-3 rounded-lg transition-all duration-200 ${
+                                className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 text-sm whitespace-nowrap ${
                                     activeMenu === item.name 
-                                        ? "bg-indigo-700 text-white shadow-md" 
-                                        : "text-indigo-200 hover:bg-indigo-700/50 hover:text-white"
+                                        ? "bg-indigo-600 text-white" 
+                                        : "text-gray-700 hover:bg-indigo-100 hover:text-indigo-800"
                                 }`} 
                                 onClick={() => {
                                     setActiveMenu(item.name);
-                                    if (item.name !== "dashboard") navigate(`/${item.name}`);
+                                    navigate(`/${item.name}`);
                                 }}
                             >
-                                <span className="text-lg">{item.icon}</span>
-                                <span>{item.label}</span>
+                                <span>{item.icon}</span>
+                                <span className="font-medium">{item.label}</span>
                             </button>
                         ))}
-                        
-                        <div className="pt-4 mt-4 border-t border-indigo-700/50">
-                            <button 
-                                className="flex items-center gap-3 w-full p-3 text-red-300 hover:bg-red-800/30 hover:text-red-200 rounded-lg transition-all duration-200" 
-                                onClick={handleLogout}
-                            >
-                                <FaSignOutAlt className="text-lg" />
-                                <span>Logout</span>
-                            </button>
-                        </div>
                     </nav>
+                    
+                    {/* Logout Button */}
+                    <button 
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg ml-2"
+                        onClick={handleLogout}
+                    >
+                        <FaSignOutAlt />
+                        <span>Logout</span>
+                    </button>
                 </div>
-            </div>
+            </header>
 
             {/* Main Content */}
-            <div className="flex-1 overflow-auto">
-                {/* Top Navigation */}
-                <header className="bg-white shadow-sm p-4">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-xl font-semibold text-gray-800">Dashboard</h1>
-                        <div className="flex items-center gap-4">
-                            <button className="p-2 rounded-full hover:bg-gray-100">
-                                <FaCalendarAlt className="text-gray-600" />
-                            </button>
-                            <button className="p-2 rounded-full hover:bg-gray-100 relative">
-                                <FaBell className="text-gray-600" />
-                                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                            </button>
-                            <button className="p-2 rounded-full hover:bg-gray-100">
-                                <FaCog className="text-gray-600" />
-                            </button>
+            <div className="flex-1 overflow-auto p-6">
+                {/* Page Title */}
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800 capitalize">
+                        Dashboard
+                    </h1>
+                    <p className="text-gray-500">
+                        Welcome back, {loggedInUser}! Here's an overview of your progress.
+                    </p>
+                </div>
+                
+                {/* Dashboard Content */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Stats Cards */}
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-gray-500 text-sm">Course Progress</p>
+                                <h3 className="text-2xl font-bold mt-1">67%</h3>
+                            </div>
+                            <div className="bg-blue-100 p-3 rounded-lg">
+                                <FaBook className="text-blue-500 text-xl" />
+                            </div>
+                        </div>
+                        <div className="mt-4 bg-gray-200 h-2 rounded-full">
+                            <div className="bg-blue-500 h-2 rounded-full w-2/3"></div>
                         </div>
                     </div>
-                </header>
+                    
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-gray-500 text-sm">Exercises Completed</p>
+                                <h3 className="text-2xl font-bold mt-1">24/36</h3>
+                            </div>
+                            <div className="bg-green-100 p-3 rounded-lg">
+                                <FaCode className="text-green-500 text-xl" />
+                            </div>
+                        </div>
+                        <div className="mt-4 bg-gray-200 h-2 rounded-full">
+                            <div className="bg-green-500 h-2 rounded-full w-2/3"></div>
+                        </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-gray-500 text-sm">Projects Submitted</p>
+                                <h3 className="text-2xl font-bold mt-1">5/8</h3>
+                            </div>
+                            <div className="bg-purple-100 p-3 rounded-lg">
+                                <FaProjectDiagram className="text-purple-500 text-xl" />
+                            </div>
+                        </div>
+                        <div className="mt-4 bg-gray-200 h-2 rounded-full">
+                            <div className="bg-purple-500 h-2 rounded-full w-5/8"></div>
+                        </div>
+                    </div>
+                    
+                    {/* Recent Activities */}
+                    <div className="md:col-span-2 lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <FaLaptopCode className="text-indigo-600" />
+                            Recent Activities
+                        </h3>
+                        <div className="space-y-4">
+                            {[1, 2, 3].map((item) => (
+                                <div key={item} className="flex items-start gap-3 pb-3 border-b border-gray-100">
+                                    <div className="bg-indigo-100 p-2 rounded">
+                                        <FaCode className="text-indigo-600" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium">Completed Exercise #{item}</h4>
+                                        <p className="text-sm text-gray-500">Array Manipulation - Level {item}</p>
+                                    </div>
+                                    <span className="text-xs text-gray-400 ml-auto">{item} hour{item !== 1 ? 's' : ''} ago</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    {/* Upcoming Mentorship */}
+                    <div className="bg-white rounded-xl shadow-sm p-6">
+                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <FaChalkboardTeacher className="text-indigo-600" />
+                            Upcoming Mentorship
+                        </h3>
+                        <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+                            <div className="flex justify-between items-center mb-3">
+                                <h4 className="font-medium">Code Review Session</h4>
+                                <span className="text-xs bg-indigo-200 text-indigo-800 py-1 px-2 rounded">Tomorrow</span>
+                            </div>
+                            <p className="text-sm text-gray-600">10:00 AM - 11:00 AM</p>
+                            <div className="flex items-center gap-2 mt-3 text-sm text-indigo-600">
+                                <FaUserCircle />
+                                <span>with David Chen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <ToastContainer />
