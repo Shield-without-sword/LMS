@@ -4,8 +4,8 @@ import { APIUrl, handleError, handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
 import { 
     FaBook, FaCode, FaProjectDiagram, FaComments, FaChalkboardTeacher, FaSignOutAlt, 
-    FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy
-  } from "react-icons/fa";
+    FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy, FaVrCardboard, FaPlayCircle
+} from "react-icons/fa";
 
 function Home() {
     const [loggedInUser, setLoggedInUser] = useState("");
@@ -67,7 +67,9 @@ function Home() {
         { name: "interview", icon: <FaBriefcase />, label: "Interview" },
         { name: "projects", icon: <FaProjectDiagram />, label: "Projects" },
         { name: "community", icon: <FaComments />, label: "Community" },
-        { name: "hackathon", icon: <FaTrophy />, label: "Hackathon" }
+        { name: "hackathon", icon: <FaTrophy />, label: "Hackathon" },
+        { name: "framevr", icon: <FaVrCardboard />, label: "Virsual Workshop" },
+        { name: "codeplayground", icon: <FaPlayCircle />, label: "Code Playground" }
     ];
 
     return (
