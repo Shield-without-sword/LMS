@@ -41,7 +41,7 @@ function App() {
         <Route path="/community" element={<PrivateRoute><Community /></PrivateRoute>} />
         <Route path="/projects" element={<PrivateRoute><Projects /></PrivateRoute>} />
         <Route path="/hackathon" element={<PrivateRoute><Hackathon /></PrivateRoute>} />
-        <Route path="/courses" element={<PrivateRoute><Courses /></PrivateRoute>} />
+        <Route path="/courses/*" element={<Courses />} />
         <Route path="/mentorship" element={<PrivateRoute><Mentorship /></PrivateRoute>} />
       </Routes>
       <ToastContainer />
