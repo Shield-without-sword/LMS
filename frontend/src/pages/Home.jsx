@@ -3,15 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { APIUrl, handleError, handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
 import { 
-  FaBook, FaCode, FaProjectDiagram, FaComments, FaChalkboardTeacher, FaSignOutAlt, 
-  FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy
-} from "react-icons/fa";
+    FaBook, FaCode, FaProjectDiagram, FaComments, FaChalkboardTeacher, FaSignOutAlt, 
+    FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy
+  } from "react-icons/fa";
 
 function Home() {
     const [loggedInUser, setLoggedInUser] = useState("");
     const [expenses, setExpenses] = useState([]);
-    const [incomeAmt, setIncomeAmt] = useState(0);
-    const [expenseAmt, setExpenseAmt] = useState(0);
     const [activeMenu, setActiveMenu] = useState("projects");
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,14 +25,6 @@ function Home() {
             setActiveMenu("projects");
         }
     }, [location]);
-
-    useEffect(() => {
-        const amounts = expenses.map(item => item.amount);
-        const income = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0);
-        const exp = amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1;
-        setIncomeAmt(income);
-        setExpenseAmt(exp);
-    }, [expenses]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
