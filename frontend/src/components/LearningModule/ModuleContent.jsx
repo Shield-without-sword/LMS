@@ -1,19 +1,18 @@
-// src/components/LearningModule/ModuleContent.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CodeCompiler from '../CodeCompiler';
+
 const ModuleContent = ({ modules }) => {
   const { moduleId, lessonId } = useParams();
   const navigate = useNavigate();
+  
+  // States should be defined at the top-level and shouldn't depend on conditions
   const [completedLessons, setCompletedLessons] = useState([]);
   const [currentModule, setCurrentModule] = useState(null);
   const [currentLesson, setCurrentLesson] = useState(null);
-  const module = modules.find(m => m.id === moduleId);
-  const lesson = module?.lessons.find(l => l.id === lessonId);
 
-  if (!lesson) return <div>Lesson not found</div>;
-
+  // Ensure module and lesson are found before setting state
   useEffect(() => {
     // Load completed lessons from localStorage
     const savedCompletedLessons = localStorage.getItem('completedLessons');
@@ -34,6 +33,7 @@ const ModuleContent = ({ modules }) => {
     }
   }, [moduleId, lessonId, modules]);
 
+  // Function to mark the lesson as complete
   const markLessonComplete = () => {
     const lessonKey = `${moduleId}:${lessonId}`;
     if (!completedLessons.includes(lessonKey)) {
@@ -45,13 +45,13 @@ const ModuleContent = ({ modules }) => {
 
   const navigateToNextLesson = () => {
     if (!currentModule || !currentLesson) return;
-    
+
     // Mark current lesson as complete
     markLessonComplete();
-    
+
     // Find index of current lesson
     const currentIndex = currentModule.lessons.findIndex(l => l.id === lessonId);
-    
+
     if (currentIndex < currentModule.lessons.length - 1) {
       // Next lesson in the same module
       const nextLesson = currentModule.lessons[currentIndex + 1];
@@ -73,10 +73,10 @@ const ModuleContent = ({ modules }) => {
 
   const navigateToPreviousLesson = () => {
     if (!currentModule || !currentLesson) return;
-    
+
     // Find index of current lesson
     const currentIndex = currentModule.lessons.findIndex(l => l.id === lessonId);
-    
+
     if (currentIndex > 0) {
       // Previous lesson in the same module
       const prevLesson = currentModule.lessons[currentIndex - 1];
@@ -100,25 +100,30 @@ const ModuleContent = ({ modules }) => {
     return completedLessons.includes(lessonKey);
   };
 
+  const handleQuizClick = () => {
+    // Assuming each lesson has a quiz at the URL `/courses/:moduleId/:lessonId/quiz`
+    navigate(`/courses/${moduleId}/${lessonId}/quiz`);
+  };
+
+  // Check for lesson and module availability
   if (!currentModule || !currentLesson) {
     return <div className="p-8 text-center">Loading lesson content...</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-        
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">{currentModule.title}</h1>
         <div className="text-sm text-gray-500">
           Module {modules.findIndex(m => m.id === moduleId) + 1} of {modules.length}
         </div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: lesson.content }} />
+      <div dangerouslySetInnerHTML={{ __html: currentLesson.content }} />
       
-      {lesson.codeExample && (
+      {currentLesson.codeExample && (
         <CodeCompiler
-          initialCode={lesson.codeExample.initialCode}
-          language={lesson.codeExample.language}
+          initialCode={currentLesson.codeExample.initialCode}
+          language={currentLesson.codeExample.language}
         />
       )}
       <div className="mb-8">
@@ -163,6 +168,14 @@ const ModuleContent = ({ modules }) => {
               Completed ✓
             </button>
           )}
+          
+          {/* Take a Quiz Button */}
+          <button
+            onClick={handleQuizClick}
+            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+          >
+            Take a Quiz
+          </button>
         </div>
         
         <button
@@ -173,7 +186,6 @@ const ModuleContent = ({ modules }) => {
         </button>
       </div>
     </div>
-
   );
 };
 
