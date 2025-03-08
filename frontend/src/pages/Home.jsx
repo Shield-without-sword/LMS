@@ -4,8 +4,8 @@ import { APIUrl, handleError, handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
 import { 
     FaBook, FaCode, FaProjectDiagram, FaComments, FaChalkboardTeacher, FaSignOutAlt, 
-    FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy, FaVrCardboard, FaPlayCircle
-} from "react-icons/fa";
+    FaUserCircle, FaLaptopCode, FaBriefcase, FaTrophy
+  } from "react-icons/fa";
 
 function Home() {
     const [loggedInUser, setLoggedInUser] = useState("");
@@ -61,59 +61,12 @@ function Home() {
     }, []);
 
     // Only the specified menu items
-    const menuItems = [
-        { name: "courses", icon: <FaBook />, label: "Courses" },
-        { name: "mentorship", icon: <FaChalkboardTeacher />, label: "Mentorship" },
-        { name: "interview", icon: <FaBriefcase />, label: "Interview" },
-        { name: "projects", icon: <FaProjectDiagram />, label: "Projects" },
-        { name: "community", icon: <FaComments />, label: "Community" },
-        { name: "hackathon", icon: <FaTrophy />, label: "Hackathon" },
-        { name: "framevr", icon: <FaVrCardboard />, label: "Virsual Workshop" },
-        { name: "codeplayground", icon: <FaPlayCircle />, label: "Code Playground" }
-    ];
+    
 
     return (
         <div className="flex flex-col h-screen bg-gray-50">
             {/* Simplified Header with Only Required Navigation Elements */}
-            <header className="bg-white shadow-md">
-                <div className="flex flex-wrap items-center justify-between px-4 py-3">
-                    {/* User Profile */}
-                    <div className="flex items-center gap-2 mr-4">
-                        <FaUserCircle className="text-lg text-indigo-600" />
-                        <span className="font-medium text-sm">{loggedInUser}</span>
-                    </div>
-                    
-                    {/* Simplified Navigation Menu with just 6 items */}
-                    <nav className="flex flex-1 flex-wrap items-center justify-center gap-2">
-                        {menuItems.map((item) => (
-                            <button 
-                                key={item.name}
-                                className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 text-sm whitespace-nowrap ${
-                                    activeMenu === item.name 
-                                        ? "bg-indigo-600 text-white" 
-                                        : "text-gray-700 hover:bg-indigo-100 hover:text-indigo-800"
-                                }`} 
-                                onClick={() => {
-                                    setActiveMenu(item.name);
-                                    navigate(`/${item.name}`);
-                                }}
-                            >
-                                <span>{item.icon}</span>
-                                <span className="font-medium">{item.label}</span>
-                            </button>
-                        ))}
-                    </nav>
-                    
-                    {/* Logout Button */}
-                    <button 
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg ml-2"
-                        onClick={handleLogout}
-                    >
-                        <FaSignOutAlt />
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </header>
+            
 
             {/* Main Content */}
             <div className="flex-1 overflow-auto p-6">
