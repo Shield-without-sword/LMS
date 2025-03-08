@@ -40,69 +40,68 @@ function Hackathon() {
     const hackathons = [
         { 
             id: 1,
-            name: "AI Innovation Summit", 
+            name: "Explore AI", 
             date: "2025-03-17", 
             status: "Registration Open", 
             prize: "$2,000", 
             tags: ["AI", "Machine Learning"],
             featured: true,
-            participants: 342,
             registrationUrl: "https://learn.microsoft.com/en-us/plans/w255c4z7dm4dgr?learnerGroupId=50cc3919-c486-4867-8ef5-b52eb56d6030&wt.mc_id=nxg_studentamb_exp1_wwl_268588"
         },
         { 
             id: 2,
-            name: "Web3 Builders Hackathon", 
-            date: "2025-05-15", 
+            name: "Tata Crucible Corporate Quiz 2025", 
+            date: "2025-03-15",
             status: "Coming Soon", 
-            prize: "$1,500", 
-            tags: ["Blockchain", "Crypto"],
+            prize: "10,86,000", 
+            tags: ["Openn inovation"],
             featured: false,
             participants: 210,
-            registrationUrl: "https://web3-builders.io/register"
+            registrationUrl: "https://unstop.com/quiz/tata-crucible-corporate-quiz-2025-tata-group-1253161"
         },
         { 
             id: 3,
-            name: "HealthTech Revolution", 
-            date: "2025-06-20", 
+            name: "Hackathon",
+            date: "2025-03-06",
             status: "Coming Soon", 
-            prize: "$3,000", 
-            tags: ["Health", "IoT"],
+            prize: "25,000",
+            tags: ["Coders"],
             featured: true,
             participants: 183,
-            registrationUrl: "https://healthtech-revolution.org/join"
+            registrationUrl: "https://unstop.com/hackathons/hackathon-ignite2k25-srm-easwari-engineering-college-1419653"
         },
         { 
             id: 4,
-            name: "Sustainable Tech Challenge", 
+            name: "AI Hackathon", 
             date: "2025-07-10", 
             status: "Coming Soon", 
-            prize: "$2,500", 
-            tags: ["Sustainability", "Climate"],
+            prize: "10,000", 
+            tags: ["AI" ],
             featured: false,
             participants: 129,
-            registrationUrl: "https://sustainabletech-challenge.com/register"
+            registrationUrl: "https://unstop.com/hackathons/ai-hackathon-axis25-vnit-nagpur-1404474"
         },
         { 
             id: 5,
-            name: "Education Innovators Hackathon", 
-            date: "2025-02-15", 
+            name: "MapmyIndia Hackathon", 
+            date: "2025-03-10", 
             status: "Completed", 
-            prize: "$1,000", 
-            tags: ["Education", "SaaS"],
+            prize: "$500", 
+            tags: ["Inovations"],
             featured: false,
             participants: 256,
-            registrationUrl: "https://edu-innovators.org/register"
+            registrationUrl: "https://unstop.com/hackathons/mapmyindia-hackathon-iit-delhi-1421205"
         },
         { 
             id: 6,
-            name: "Global Fintech Summit", 
-            date: "2025-01-18", 
+            name: "Software Hackathont", 
+            date: "2025-04-03", 
             status: "Completed", 
-            prize: "$5,000", 
+            prize: "$55,000", 
             tags: ["Finance", "Security"],
             featured: true,
             participants: 408,
-            registrationUrl: "https://globalfintech-summit.com/register"
+            registrationUrl: "https://unstop.com/hackathons/software-hackathon-mkssss-cummins-college-of-engineering-for-women-ccoew-pune-1409208"
         },
     ];
 
