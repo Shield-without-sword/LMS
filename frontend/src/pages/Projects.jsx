@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Project = () => {
   const [projectDescription, setProjectDescription] = useState('');
@@ -9,7 +9,9 @@ const Project = () => {
   const [error, setError] = useState('');
   const [repoInfo, setRepoInfo] = useState(null);
   const [taskGenerated, setTaskGenerated] = useState(false);
+  const [theme, setTheme] = useState('dark'); // 'dark' or 'light'
 
+  // All your existing functions
   // Function to generate tasks using Gemini API
   const generateTasksWithGemini = async (description) => {
     try {
@@ -217,182 +219,309 @@ const Project = () => {
     return Math.round((completedTasks / tasks.length) * 100);
   };
 
+  // Toggle theme function
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+  
+  useEffect(() => {
+    document.body.className = theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100';
+  }, [theme]);
+
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Gemini-Powered Task Tracker for GitHub Projects</h1>
-      
-      {/* Project Description Form */}
-      <div className="mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <h2 className="text-lg font-semibold mb-3">Step 1: Describe Your Project</h2>
-        <form onSubmit={handleProjectSubmit}>
-          <div className="mb-3">
-            <label htmlFor="projectDescription" className="block text-sm font-medium mb-1">
-              Project Description:
-            </label>
-            <textarea
-              id="projectDescription"
-              rows="3"
-              placeholder="Describe your project (e.g., 'A React e-commerce website with user authentication')"
-              value={projectDescription}
-              onChange={(e) => setProjectDescription(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-            disabled={generatingTasks}
-          >
-            {generatingTasks ? (
-              <>
-                <span className="inline-block mr-2 animate-spin">⟳</span>
-                Generating Tasks with Gemini...
-              </>
-            ) : (
-              'Generate Tasks with Gemini AI'
-            )}
-          </button>
-        </form>
-      </div>
-      
-      {/* Repository URL Form */}
-      <div className={`mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200 ${!taskGenerated ? 'opacity-50' : ''}`}>
-        <h2 className="text-lg font-semibold mb-3">Step 2: Connect Your GitHub Repository</h2>
-        <form onSubmit={handleRepoSubmit}>
-          <div className="mb-3">
-            <label htmlFor="repoUrl" className="block text-sm font-medium mb-1">
-              GitHub Repository URL:
-            </label>
-            <input
-              id="repoUrl"
-              type="text"
-              placeholder="https://github.com/username/repository"
-              value={repoUrl}
-              onChange={(e) => setRepoUrl(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-              disabled={!taskGenerated}
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-green-300"
-            disabled={loading || !taskGenerated}
-          >
-            {loading ? (
-              <>
-                <span className="inline-block mr-2 animate-spin">⟳</span>
-                Analyzing Repository...
-              </>
-            ) : (
-              'Analyze Repository'
-            )}
-          </button>
-        </form>
-      </div>
-      
-      {/* Error Display */}
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          <p>{error}</p>
-        </div>
-      )}
-      
-      {/* Repository Info */}
-      {repoInfo && (
-        <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h2 className="text-lg font-semibold mb-2">Repository: {repoInfo.owner}/{repoInfo.repo}</h2>
-          <p>Analyzed {repoInfo.commitCount} commits</p>
-          <div className="mt-4">
-            <div className="relative pt-1">
-              <div className="flex mb-2 items-center justify-between">
-                <div>
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
-                    Completion Progress
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-semibold inline-block text-blue-600">
-                    {calculateProgress()}%
-                  </span>
-                </div>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} transition-colors duration-300`}>
+      {/* Nav Bar */}
+      <nav className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'} sticky top-0 z-50 shadow-md`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`h-10 w-10 ${theme === 'dark' ? 'text-purple-500' : 'text-blue-600'}`}>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-9h-2v3H8v2h3v3h2v-3h3v-2h-3z"/>
+                </svg>
+                <h1 className="ml-2 text-xl font-bold">TaskGenius</h1>
               </div>
-              <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                <div 
-                  style={{ width: `${calculateProgress()}%` }} 
-                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600">
-                </div>
-              </div>
+            </div>
+            <div className="flex items-center">
+              <button onClick={toggleTheme} className="rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {theme === 'dark' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
             </div>
           </div>
         </div>
-      )}
-      
-      {/* Task List */}
-      {taskGenerated && (
-        <div>
-          <h2 className="text-xl font-semibold mb-4">
-            Gemini-Generated Tasks for "{projectDescription}"
-          </h2>
-          
-          {tasks.length > 0 ? (
-            <ul className="space-y-3">
-              {tasks.map((task) => (
-                <li 
-                  key={task.id} 
-                  className={`p-3 rounded border ${
-                    task.completed ? 'border-green-300 bg-green-50' : 'border-gray-300 bg-gray-50'
-                  }`}
+      </nav>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-10">
+          <h1 className={`text-4xl font-extrabold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+            <span className={`${theme === 'dark' ? 'text-purple-400' : 'text-blue-600'}`}>Gemini-Powered</span> Task Tracker
+          </h1>
+          <p className={`mt-3 max-w-2xl mx-auto text-xl ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>
+            Generate and track development tasks using AI and GitHub integration
+          </p>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid gap-8 md:grid-cols-1">
+          {/* Project Description Form */}
+          <div className={`rounded-xl shadow-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white'} transition-all duration-300 transform hover:scale-[1.01]`}>
+            <div className={`p-6 ${theme === 'dark' ? 'bg-gradient-to-r from-purple-900 to-indigo-900' : 'bg-gradient-to-r from-blue-500 to-indigo-600'} text-white`}>
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                </svg>
+                <h2 className="text-xl font-bold">Step 1: Project Description</h2>
+              </div>
+              <p className="mt-2 opacity-80">Describe your project and let Gemini generate tasks</p>
+            </div>
+
+            <div className="p-6">
+              <form onSubmit={handleProjectSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="projectDescription" className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2`}>
+                    What are you building?
+                  </label>
+                  <textarea
+                    id="projectDescription"
+                    rows="3"
+                    placeholder="Describe your project (e.g., 'A React e-commerce website with user authentication')"
+                    value={projectDescription}
+                    onChange={(e) => setProjectDescription(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'} focus:outline-none focus:ring-2 ${theme === 'dark' ? 'focus:ring-purple-500' : 'focus:ring-blue-500'} focus:border-transparent transition-colors duration-200`}
+                    required
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  className={`w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white ${generatingTasks ? (theme === 'dark' ? 'bg-purple-700' : 'bg-blue-400') : (theme === 'dark' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-blue-600 hover:bg-blue-700')} focus:outline-none focus:ring-2 ${theme === 'dark' ? 'focus:ring-purple-500' : 'focus:ring-blue-500'} focus:ring-offset-2 transition-colors duration-200 disabled:opacity-70`}
+                  disabled={generatingTasks}
                 >
-                  <div className="flex items-start">
-                    <div className={`mt-1 mr-3 flex-shrink-0 ${
-                      task.completed ? 'text-green-600' : 'text-gray-400'
-                    }`}>
-                      {task.completed ? (
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd"></path>
-                        </svg>
-                      )}
+                  {generatingTasks ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Generating Tasks...
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+                      </svg>
+                      Generate Tasks with Gemini AI
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Repository URL Form */}
+          <div className={`rounded-xl shadow-lg overflow-hidden ${!taskGenerated ? 'opacity-75 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white'} transition-all duration-300 transform hover:scale-[1.01]`}>
+            <div className={`p-6 ${theme === 'dark' ? 'bg-gradient-to-r from-green-900 to-teal-900' : 'bg-gradient-to-r from-green-500 to-teal-500'} text-white`}>
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
+                <h2 className="text-xl font-bold">Step 2: Connect GitHub Repository</h2>
+              </div>
+              <p className="mt-2 opacity-80">Link your repository to track task progress</p>
+            </div>
+
+            <div className="p-6">
+              <form onSubmit={handleRepoSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="repoUrl" className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2`}>
+                    GitHub Repository URL:
+                  </label>
+                  <input
+                    id="repoUrl"
+                    type="text"
+                    placeholder="https://github.com/username/repository"
+                    value={repoUrl}
+                    onChange={(e) => setRepoUrl(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'} focus:outline-none focus:ring-2 ${theme === 'dark' ? 'focus:ring-green-500' : 'focus:ring-green-500'} focus:border-transparent transition-colors duration-200`}
+                    required
+                    disabled={!taskGenerated}
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  className={`w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white ${loading ? (theme === 'dark' ? 'bg-green-700' : 'bg-green-400') : (theme === 'dark' ? 'bg-green-600 hover:bg-green-700' : 'bg-green-600 hover:bg-green-700')} focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-70`}
+                  disabled={loading || !taskGenerated}
+                >
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Analyzing Repository...
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                      </svg>
+                      Analyze Repository
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className={`rounded-lg shadow-md overflow-hidden ${theme === 'dark' ? 'bg-red-900 border border-red-800' : 'bg-red-100 border border-red-400'} transition-transform transform animate-pulse`}>
+              <div className="px-4 py-3 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${theme === 'dark' ? 'text-red-300' : 'text-red-500'} mr-3`} viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <p className={`text-sm ${theme === 'dark' ? 'text-red-300' : 'text-red-700'}`}>{error}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Repository Info */}
+          {repoInfo && (
+            <div className={`rounded-xl shadow-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white'} transition-all duration-300 transform hover:scale-[1.01]`}>
+              <div className={`p-6 ${theme === 'dark' ? 'bg-gradient-to-r from-blue-900 to-indigo-900' : 'bg-gradient-to-r from-blue-400 to-indigo-500'} text-white`}>
+                <h2 className="text-xl font-bold flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                  </svg>
+                  Repository: {repoInfo.owner}/{repoInfo.repo}
+                </h2>
+                <div className="mt-2 flex items-center text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                  </svg>
+                  Analyzed {repoInfo.commitCount} commits
+                </div>
+              </div>
+
+              <div className="p-6">
+                <h3 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>Completion Progress</h3>
+                <div className="relative pt-1">
+                  <div className="flex mb-2 items-center justify-between">
+                    <div>
+                      <span className={`text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full ${theme === 'dark' ? 'text-blue-300 bg-blue-900' : 'text-blue-600 bg-blue-200'}`}>
+                        {calculateProgress() < 30 ? 'Just Started' : calculateProgress() < 70 ? 'In Progress' : 'Almost Done'}
+                      </span>
                     </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${task.completed ? 'text-green-800' : 'text-gray-700'}`}>
-                        {task.name}
-                      </p>
-                      <div className="flex flex-wrap mt-1 gap-1">
-                        {task.keywords.map((keyword, idx) => (
-                          <span key={idx} className="inline-block px-2 py-1 text-xs rounded bg-gray-200 text-gray-700">
-                            {keyword}
-                          </span>
-                        ))}
-                      </div>
-                      <p className="text-sm text-gray-500 mt-2">
-                        Status: {task.completed ? 'Completed' : 'Pending'}
-                      </p>
+                    <div className="text-right">
+                      <span className={`text-xs font-semibold inline-block ${theme === 'dark' ? 'text-blue-300' : 'text-blue-600'}`}>
+                        {calculateProgress()}%
+                      </span>
                     </div>
                   </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-600">No tasks generated yet. Please describe your project and generate tasks with Gemini.</p>
+                  <div className={`overflow-hidden h-2 mb-4 text-xs flex rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                    <div 
+                      style={{ width: `${calculateProgress()}%` }} 
+                      className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${theme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'} transition-all duration-500 ease-in-out`}>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
-      )}
 
-      {/* Loading Indicator */}
-      {loading && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-5 rounded-lg shadow-lg">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-700 mx-auto"></div>
-            <p className="mt-2">Analyzing repository commits...</p>
+        {/* Task List */}
+        {taskGenerated && (
+          <div className={`mt-10 rounded-xl shadow-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white'} transition-all duration-300`}>
+            <div className={`p-6 ${theme === 'dark' ? 'bg-gradient-to-r from-purple-900 to-pink-900' : 'bg-gradient-to-r from-purple-500 to-pink-500'} text-white`}>
+              <h2 className="text-xl font-bold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                Gemini-Generated Tasks
+              </h2>
+              <p className="mt-2 opacity-80">
+                For project: "{projectDescription}"
+              </p>
+            </div>
+
+            <div className="p-6">
+              {tasks.length > 0 ? (
+                <ul className="space-y-4 divide-y divide-gray-200">
+                  {tasks.map((task, idx) => (
+                    <li 
+                      key={task.id} 
+                      className={`p-4 rounded-lg ${task.completed 
+                        ? (theme === 'dark' ? 'bg-green-900/30 border border-green-800' : 'bg-green-50 border border-green-200')
+                        : (theme === 'dark' ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200')} 
+                      transition-colors duration-300`}
+                    >
+                      <div className="flex items-center">
+                        <div className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center ${
+                          task.completed 
+                            ? (theme === 'dark' ? 'bg-green-500 text-green-100' : 'bg-green-500 text-white') 
+                            : (theme === 'dark' ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-600')
+                        }`}>
+                          {task.completed ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          ) : (
+                            <span>{idx + 1}</span>
+                          )}
+                        </div>
+                        <div className="ml-3 w-full">
+                          <p className={`text-sm font-medium ${task.completed 
+                            ? (theme === 'dark' ? 'text-green-200 line-through' : 'text-green-800 line-through') 
+                            : (theme === 'dark' ? 'text-white' : 'text-gray-800')}`}>
+                            {task.name}
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {task.keywords.map((keyword, kidx) => (
+                              <span 
+                                key={`${task.id}-${kidx}`} 
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                  task.completed
+                                    ? (theme === 'dark' ? 'bg-green-800 text-green-200' : 'bg-green-100 text-green-800')
+                                    : (theme === 'dark' ? 'bg-gray-600 text-gray-300' : 'bg-gray-200 text-gray-800')
+                                }`}
+                              >
+                                {keyword}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className={`text-center py-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                  <p className="mt-2 text-lg">No tasks generated yet.</p>
+                  <p className="mt-1">Add a project description to get started.</p>
+                </div>
+              )}
+            </div>
           </div>
+        )}
+
+        {/* Footer */}
+        <div className="mt-16 text-center">
+          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+            TaskGenius - Powered by Gemini AI and GitHub
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
 };
