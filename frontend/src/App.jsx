@@ -10,8 +10,6 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import LandingPage from './pages/LandingPage';
 import RefrshHandler from './RefrshHandler';
-
-import Community from './pages/Community';
 import RoadmapPage from './pages/Projects'; // Import Projects Page
 import Hackathon from './pages/Hackathon';
 import Courses from './pages/Courses'; // Import Courses Page
@@ -21,6 +19,8 @@ import Quiz from './pages/Quiz';
 import EmployeeManagementApp from './Elements/EmployeeManagementApp';
 import EmployeeDetails from './Elements/EmployeeDetails';
 import NavBar from './components/NavBar'; // Import NavBar component
+import FrameVRRoom from './pages/FrameVRRoom';
+import CodePlayground from './pages/CodePlayground';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -83,6 +83,8 @@ function App() {
         <Route path="employee/:id" element={<PrivateRoute><EmployeeDetails /></PrivateRoute>} />
         <Route path="/quiz/:moduleId" element={<PrivateRoute><Quiz /></PrivateRoute>} />
         <Route path="/quiz" element={<PrivateRoute><Quiz /></PrivateRoute>} />
+        <Route path="/CodePlayground" element={<PrivateRoute><CodePlayground/></PrivateRoute>} />
+        <Route path="/VR" element={<PrivateRoute><FrameVRRoom/></PrivateRoute>} />
       </Routes>
       <ToastContainer />
     </div>
