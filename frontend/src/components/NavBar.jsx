@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// ...existing code...
 import { 
-  FaBook, 
-  FaChalkboardTeacher, 
-  FaBriefcase, 
-  FaProjectDiagram, 
-  FaComments, 
-  FaTrophy, 
-  FaUserCircle, 
-  FaSignOutAlt,
-  FaMoon,
-  FaSun 
-} from 'react-icons/fa';
+    FaBook, 
+    FaChalkboardTeacher, 
+    FaBriefcase, 
+    FaProjectDiagram, 
+    FaComments, 
+    FaTrophy, 
+    FaUserCircle, 
+    FaSignOutAlt,
+    FaCode, // New icon import
+    FaVrCardboard // New icon import
+  } from 'react-icons/fa';
 
 const NavBar = ({ loggedInUser, activeMenu, setActiveMenu, handleLogout }) => {
     const navigate = useNavigate();
@@ -26,14 +27,17 @@ const NavBar = ({ loggedInUser, activeMenu, setActiveMenu, handleLogout }) => {
         }
     }, [darkMode]);
     
-    const menuItems = [
-        { name: "courses", icon: <FaBook />, label: "Courses" },
-        { name: "mentorship", icon: <FaChalkboardTeacher />, label: "Mentorship" },
-        { name: "interview", icon: <FaBriefcase />, label: "Interview" },
-        { name: "projects", icon: <FaProjectDiagram />, label: "Projects" },
-        { name: "community", icon: <FaComments />, label: "Community" },
-        { name: "hackathon", icon: <FaTrophy />, label: "Hackathon" }
-    ];
+// ...existing code...
+const menuItems = [
+    { name: "courses", icon: <FaBook />, label: "Courses" },
+    { name: "mentorship", icon: <FaChalkboardTeacher />, label: "Mentorship" },
+    { name: "interview", icon: <FaBriefcase />, label: "Interview" },
+    { name: "projects", icon: <FaProjectDiagram />, label: "Projects" },
+    { name: "community", icon: <FaComments />, label: "Community" },
+    { name: "hackathon", icon: <FaTrophy />, label: "Hackathon" },
+    { name: "codeplayground", icon: <FaCode />, label: "Code Playground" }, // New menu item
+    { name: "vr", icon: <FaVrCardboard />, label: "VR Room" } // New menu item
+];
     
     return (
         <header className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white'} shadow-md transition-colors duration-300`}>
