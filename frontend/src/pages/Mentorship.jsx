@@ -143,171 +143,167 @@ const Mentorship = () => {
   };
 
   return (
-    <div className="bg-black text-gray-200 min-h-screen">  
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center mb-12 mt-8">
-          <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">👨‍🏫 MENTORSHIP PROGRAM</h1>
-          <p className="text-lg text-gray-300">
-            Get one-on-one mentorship from industry experts. Improve your coding skills, 
-            work on real-world projects, and receive career guidance.
-          </p>
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold mb-4">👨‍🏫 Mentorship Program</h1>
+        <p className="text-lg">
+          Get one-on-one mentorship from industry experts. Improve your coding skills, 
+          work on real-world projects, and receive career guidance.
+        </p>
+      </div>
+
+      {/* Success Message */}
+      {success && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+          <strong className="font-bold">Success!</strong>
+          <span className="block sm:inline"> Your appointment request has been sent to the mentor. They will contact you shortly.</span>
         </div>
+      )}
 
-        {/* Success Message */}
-        {success && (
-          <div className="bg-green-900 border border-green-600 text-green-300 px-4 py-3 rounded relative mb-6">
-            <strong className="font-bold">Success!</strong>
-            <span className="block sm:inline"> Your appointment request has been sent to the mentor. They will contact you shortly.</span>
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
+      )}
+
+      {/* Mentor Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        {mentors.map((mentor) => (
+          <div key={mentor.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="h-64 overflow-hidden">
+              <img 
+                src={mentor.image} 
+                alt={mentor.alt}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.error(`Image loading error for ${mentor.name}:`, e);
+                  e.target.src = '/api/placeholder/300/300'; // Fallback image
+                }}
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold mb-2">{mentor.name}</h3>
+              <p className="text-gray-700 mb-2"><strong>Expertise:</strong> {mentor.expertise}</p>
+              <p className="text-gray-700 mb-4"><strong>Experience:</strong> {mentor.experience}</p>
+              <button
+                onClick={() => handleAppointmentClick(mentor)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+              >
+                Appoint Mentor (500 rupees)
+              </button>
+            </div>
           </div>
-        )}
+        ))}
+      </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-900 border border-red-600 text-red-300 px-4 py-3 rounded relative mb-6">
-            <strong className="font-bold">Error!</strong>
-            <span className="block sm:inline"> {error}</span>
-          </div>
-        )}
-
-        {/* Mentor Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {mentors.map((mentor) => (
-            <div key={mentor.id} className="bg-gray-900 rounded-lg overflow-hidden transform hover:scale-105 transition duration-300 border border-gray-800 hover:border-cyan-600 shadow-lg hover:shadow-cyan-500/20">
-              <div className="h-64 overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
-                <img 
-                  src={mentor.image} 
-                  alt={mentor.alt}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    console.error(`Image loading error for ${mentor.name}:`, e);
-                    e.target.src = '/api/placeholder/300/300'; // Fallback image
-                  }}
+      {/* Appointment Form Modal */}
+      {showForm && selectedMentor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+            <div className="bg-blue-600 text-white p-4">
+              <h3 className="text-xl font-bold">Book an Appointment with {selectedMentor.name}</h3>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter your full name"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2 text-cyan-400">{mentor.name}</h3>
-                <p className="text-gray-300 mb-2"><strong className="text-purple-400">Expertise:</strong> {mentor.expertise}</p>
-                <p className="text-gray-300 mb-4"><strong className="text-purple-400">Experience:</strong> {mentor.experience}</p>
-                <button
-                  onClick={() => handleAppointmentClick(mentor)}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 shadow-md hover:shadow-cyan-500/30"
-                >
-                  Appoint Mentor (500 rupees)
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Appointment Form Modal */}
-        {showForm && selectedMentor && (
-          <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-            <div className="bg-gray-900 rounded-lg shadow-2xl shadow-cyan-500/20 w-full max-w-md overflow-hidden border border-gray-700">
-              <div className="bg-gradient-to-r from-purple-900 to-blue-900 text-white p-4">
-                <h3 className="text-xl font-bold">Book an Appointment with {selectedMentor.name}</h3>
+              
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="your.email@example.com"
+                />
               </div>
               
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300">Your Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 text-white"
-                    placeholder="Enter your full name"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email Address</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 text-white"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300">Phone Number</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 text-white"
-                    placeholder="Your phone number"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-300">Message (Optional)</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 text-white"
-                    placeholder="Tell the mentor what you'd like to learn or discuss"
-                  ></textarea>
-                </div>
-                
-                <div className="flex justify-between pt-4">
-                  <button
-                    type="button"
-                    onClick={closeForm}
-                    className="bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-2 px-4 rounded-md transition duration-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 shadow-md hover:shadow-cyan-500/30"
-                  >
-                    {loading ? 'Processing...' : 'Confirm Appointment'}
-                  </button>
-                </div>
-              </form>
-            </div>
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Your phone number"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message (Optional)</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  rows="3"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Tell the mentor what you'd like to learn or discuss"
+                ></textarea>
+              </div>
+              
+              <div className="flex justify-between pt-4">
+                <button
+                  type="button"
+                  onClick={closeForm}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded transition duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+                >
+                  {loading ? 'Processing...' : 'Confirm Appointment'}
+                </button>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Services Section */}
-        <div className="bg-gray-900 p-6 rounded-lg border border-gray-800 shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">OUR SERVICES</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gray-800 p-4 rounded shadow-md border border-gray-700 hover:border-cyan-600 transition duration-300 transform hover:scale-105 hover:shadow-cyan-500/20">
-              <h3 className="font-bold text-lg mb-2 text-cyan-400">👥 Peer Learning</h3>
-              <p className="text-gray-300">Join study groups and learn with others.</p>
-            </div>
-            
-            <div className="bg-gray-800 p-4 rounded shadow-md border border-gray-700 hover:border-cyan-600 transition duration-300 transform hover:scale-105 hover:shadow-cyan-500/20">
-              <h3 className="font-bold text-lg mb-2 text-cyan-400">💼 Career Coaching</h3>
-              <p className="text-gray-300">Get career advice and resume reviews.</p>
-            </div>
-            
-            <div className="bg-gray-800 p-4 rounded shadow-md border border-gray-700 hover:border-cyan-600 transition duration-300 transform hover:scale-105 hover:shadow-cyan-500/20">
-              <h3 className="font-bold text-lg mb-2 text-cyan-400">🛠 Project Assistance</h3>
-              <p className="text-gray-300">Receive help on your personal and team projects.</p>
-            </div>
-            
-            <div className="bg-gray-800 p-4 rounded shadow-md border border-gray-700 hover:border-cyan-600 transition duration-300 transform hover:scale-105 hover:shadow-cyan-500/20">
-              <h3 className="font-bold text-lg mb-2 text-cyan-400">📝 Mock Interviews</h3>
-              <p className="text-gray-300">Prepare for real job interviews with mock sessions.</p>
-            </div>
+      {/* Services Section */}
+      <div className="bg-gray-100 p-6 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white p-4 rounded shadow">
+            <h3 className="font-bold text-lg mb-2">👥 Peer Learning</h3>
+            <p>Join study groups and learn with others.</p>
+          </div>
+          
+          <div className="bg-white p-4 rounded shadow">
+            <h3 className="font-bold text-lg mb-2">💼 Career Coaching</h3>
+            <p>Get career advice and resume reviews.</p>
+          </div>
+          
+          <div className="bg-white p-4 rounded shadow">
+            <h3 className="font-bold text-lg mb-2">🛠 Project Assistance</h3>
+            <p>Receive help on your personal and team projects.</p>
+          </div>
+          
+          <div className="bg-white p-4 rounded shadow">
+            <h3 className="font-bold text-lg mb-2">📝 Mock Interviews</h3>
+            <p>Prepare for real job interviews with mock sessions.</p>
           </div>
         </div>
       </div>
