@@ -1,8 +1,3 @@
-https://framevr.io/xtq-kar-ifh
-
-https://live-code-editor-omega.vercel.app/
-
-
 # 📚 Full Stack LMS – The Ultimate Learning Hub for Developers  
 
 🚀 **A modern Learning Management System designed to help aspiring full-stack developers learn, practice, and grow.** 🚀  
@@ -41,9 +36,6 @@ Full Stack LMS is a **MERN stack** application that provides structured learning
 - **Frontend:** React, Tailwind CSS, ShadCN  
 - **Backend:** Node.js, Express.js  
 - **Database:** MongoDB  
-- **AI & Interview Evaluation:** TensorFlow.js, OpenCV  
-- **VR & 3D Interaction:** Three.js, WebXR  
-- **Real-time Collaboration:** WebSockets, Firebase  
 
 ---
 
@@ -82,7 +74,7 @@ Full Stack LMS is a **MERN stack** application that provides structured learning
 ---
 
 ## 📜 **Credits**  
-- **Developers**: [@Shubham_Bendre](https://github.com/Shubham-Bendre)  
+- **Developers**: [@Shubham_Bendre](https://github.com/Shubham-Bendre), [@Malhar_Singh](https://github.com/Malhar2400), [@Yash_Chougule](https://github.com/YxASH)  
 - **Inspiration**: Interactive coding platforms like W3Schools, LeetCode, and Udemy  
 
 ---
