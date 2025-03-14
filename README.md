@@ -71,6 +71,15 @@ Full Stack LMS is a **MERN stack** application that provides structured learning
 ### 6️⃣ VR Workshop Room  
 ![VR Room](./screenshots/VRRoom.png)  
 
+### 7️⃣ Community
+![VR Room](./screenshots/Community.png)
+
+### 8️⃣ Mentorship  
+![VR Room](./screenshots/Mentorship.png) 
+
+### 9️⃣ Hackthon 
+![VR Room](./screenshots/Hackthon.png)  
+
 ---
 
 ## 📜 **Credits**  
